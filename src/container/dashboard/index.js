@@ -111,10 +111,10 @@ export default ({ navigation }) => {
       } else if (response.customButton) {
         console.log("User tapped custom button: ", response.customButton);
       } else {
-        let source = response.uri;
+        // let source = response.uri;
 
         // You can also display the image using data:
-        // let source =  'data:image/jpeg;base64,' + response.data ;
+        let source = "data:image/jpeg;base64," + response.data;
         dispatchLoaderAction({
           type: LOADING_START,
         });
