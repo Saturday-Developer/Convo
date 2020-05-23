@@ -13,7 +13,10 @@ import { globalStyle, color } from "../../utility";
 import { Store } from "../../context/store";
 import { LOADING_START, LOADING_STOP } from "../../context/actions/type";
 import { setAsyncStorage, keys } from "../../asyncStorage";
-import { setUniqueValue } from "../../utility/constants";
+import {
+  setUniqueValue,
+  keyboardVerticalOffset,
+} from "../../utility/constants";
 
 export default ({ navigation }) => {
   const globalState = useContext(Store);
@@ -24,7 +27,7 @@ export default ({ navigation }) => {
     password: "",
     confirmPassword: "",
   });
-  const [keyboardVerticalOffset, setkeyboardVerticalOffset] = useState(-100);
+  const [logo, toggleLogo] = useState(true);
   const { email, password, confirmPassword, name } = credential;
 
   const setInitialState = () => {
@@ -33,6 +36,7 @@ export default ({ navigation }) => {
 
   //   * ON SIGN UP PRESS
   const onSignUpPress = () => {
+    Keyboard.dismiss();
     if (!name) {
       alert("Name is required");
     } else if (!email) {
@@ -83,6 +87,16 @@ export default ({ navigation }) => {
       [name]: value,
     });
   };
+  // * ON INPUT FOCUS
+
+  const handleFocus = () => {
+    toggleLogo(!logo);
+  };
+  // * ON INPUT BLUR
+
+  const handleBlur = () => {
+    toggleLogo(!logo);
+  };
   return (
     <KeyboardAvoidingView
       keyboardVerticalOffset={keyboardVerticalOffset}
@@ -91,33 +105,42 @@ export default ({ navigation }) => {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <SafeAreaView style={{ flex: 1, backgroundColor: color.BLACK }}>
-          <View style={[globalStyle.containerCentered]}>
-            <Logo />
-          </View>
+          {logo && (
+            <View style={[globalStyle.containerCentered]}>
+              <Logo />
+            </View>
+          )}
+
           <View style={[globalStyle.flex2, globalStyle.sectionCentered]}>
             <InputField
               placeholder="Enter name"
               value={name}
               onChangeText={(text) => handleOnChange("name", text)}
-              onFocus={() => setkeyboardVerticalOffset(-200)}
-              onBlur={() => setkeyboardVerticalOffset(-100)}
+              onFocus={() => handleFocus()}
+              onBlur={() => handleBlur()}
             />
             <InputField
               placeholder="Enter email"
               value={email}
               onChangeText={(text) => handleOnChange("email", text)}
+              onFocus={() => handleFocus()}
+              onBlur={() => handleBlur()}
             />
             <InputField
               placeholder="Enter password"
               secureTextEntry={true}
               value={password}
               onChangeText={(text) => handleOnChange("password", text)}
+              onFocus={() => handleFocus()}
+              onBlur={() => handleBlur()}
             />
             <InputField
               placeholder="Confirm Password"
               secureTextEntry={true}
               value={confirmPassword}
               onChangeText={(text) => handleOnChange("confirmPassword", text)}
+              onFocus={() => handleFocus()}
+              onBlur={() => handleBlur()}
             />
 
             <RoundCornerButton

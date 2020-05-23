@@ -14,7 +14,10 @@ import { globalStyle, color } from "../../utility";
 import { Store } from "../../context/store";
 import { LOADING_START, LOADING_STOP } from "../../context/actions/type";
 import { setAsyncStorage, keys } from "../../asyncStorage";
-import { setUniqueValue } from "../../utility/constants";
+import {
+  setUniqueValue,
+  keyboardVerticalOffset,
+} from "../../utility/constants";
 
 export default ({ navigation }) => {
   const globalState = useContext(Store);
@@ -23,7 +26,7 @@ export default ({ navigation }) => {
     email: "",
     password: "",
   });
-
+  const [logo, toggleLogo] = useState(true);
   const { email, password } = credential;
 
   const setInitialState = () => {
@@ -39,6 +42,7 @@ export default ({ navigation }) => {
 
   //   * ON LOGIN PRESS
   const onLoginPress = () => {
+    Keyboard.dismiss();
     if (!email) {
       alert("Email is required");
     } else if (!password) {
@@ -67,9 +71,19 @@ export default ({ navigation }) => {
         });
     }
   };
+  // * ON INPUT FOCUS
+
+  const handleFocus = () => {
+    toggleLogo(!logo);
+  };
+  // * ON INPUT BLUR
+
+  const handleBlur = () => {
+    toggleLogo(!logo);
+  };
   return (
     <KeyboardAvoidingView
-      keyboardVerticalOffset={-100}
+      keyboardVerticalOffset={keyboardVerticalOffset}
       behavior={Platform.OS == "ios" ? "padding" : "height"}
       style={[globalStyle.flex1, { backgroundColor: color.BLACK }]}
     >
@@ -77,20 +91,26 @@ export default ({ navigation }) => {
         <SafeAreaView
           style={[globalStyle.flex1, { backgroundColor: color.BLACK }]}
         >
-          <View style={[globalStyle.containerCentered]}>
-            <Logo />
-          </View>
+          {logo && (
+            <View style={[globalStyle.containerCentered]}>
+              <Logo />
+            </View>
+          )}
           <View style={[globalStyle.flex2, globalStyle.sectionCentered]}>
             <InputField
               placeholder="Enter email"
               value={email}
               onChangeText={(text) => handleOnChange("email", text)}
+              onFocus={() => handleFocus()}
+              onBlur={() => handleBlur()}
             />
             <InputField
               placeholder="Enter password"
               value={password}
               secureTextEntry={true}
               onChangeText={(text) => handleOnChange("password", text)}
+              onFocus={() => handleFocus()}
+              onBlur={() => handleBlur()}
             />
 
             <RoundCornerButton title="Login" onPress={() => onLoginPress()} />
