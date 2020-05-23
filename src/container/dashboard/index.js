@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useLayoutEffect } from "react";
-import { SafeAreaView, Alert } from "react-native";
+import { SafeAreaView, Alert, Text } from "react-native";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import ImagePicker from "react-native-image-picker";
 import { Profile } from "../../component";
@@ -9,6 +9,7 @@ import { Store } from "../../context/store";
 import { LOADING_STOP, LOADING_START } from "../../context/actions/type";
 import { uuid } from "../../utility/constants";
 import { clearAsyncStorage } from "../../asyncStorage";
+import { FlatList } from "react-native-gesture-handler";
 
 export default ({ navigation }) => {
   const globalState = useContext(Store);
@@ -61,6 +62,7 @@ export default ({ navigation }) => {
         .database()
         .ref("users")
         .on("value", (dataSnapshot) => {
+          let users = [];
           dataSnapshot.forEach((child) => {
             if (uuid === child.val().user.uuid) {
               setUserDetail({
@@ -69,16 +71,15 @@ export default ({ navigation }) => {
                 profileImg: child.val().user.profileImg,
               });
             } else {
-              setAllUsers([
-                ...allUsers,
-                {
-                  id: uuid,
-                  name: child.val().user.name,
-                  profileImg: child.val().user.profileImg,
-                },
-              ]);
+              console.log(child.val().user.name);
+              users.push({
+                id: uuid,
+                name: child.val().user.name,
+                profileImg: child.val().user.profileImg,
+              });
             }
           });
+          setAllUsers(users);
           dispatchLoaderAction({
             type: LOADING_STOP,
           });
@@ -176,6 +177,13 @@ export default ({ navigation }) => {
         onImgTap={() => imgTap()}
         onEditImgTap={() => selectPhotoTapped()}
         name={name}
+      />
+      <FlatList
+        data={allUsers}
+        keyExtractor={(_, index) => index.toString()}
+        renderItem={({ item }) => (
+          <Text style={{ color: "#fff" }}>{item.name}</Text>
+        )}
       />
     </SafeAreaView>
   );
