@@ -5,7 +5,7 @@ import {
   View,
   Keyboard,
   KeyboardAvoidingView,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from "react-native";
 ("react-native-keyboard-aware-scroll-view");
 import firebase from "../../firebase/config";
@@ -69,46 +69,46 @@ export default ({ navigation }) => {
   };
   return (
     <KeyboardAvoidingView
+      keyboardVerticalOffset={-100}
       behavior={Platform.OS == "ios" ? "padding" : "height"}
       style={[globalStyle.flex1, { backgroundColor: color.BLACK }]}
     >
-       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView
-        style={[globalStyle.flex1, { backgroundColor: color.BLACK }]}
-      >
-        
-        <View style={[globalStyle.containerCentered]}>
-          <Logo />
-        </View>
-        <View style={[globalStyle.flex2, globalStyle.sectionCentered]}>
-          <InputField
-            placeholder="Enter email"
-            value={email}
-            onChangeText={(text) => handleOnChange("email", text)}
-          />
-          <InputField
-            placeholder="Enter password"
-            value={password}
-            secureTextEntry={true}
-            onChangeText={(text) => handleOnChange("password", text)}
-          />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <SafeAreaView
+          style={[globalStyle.flex1, { backgroundColor: color.BLACK }]}
+        >
+          <View style={[globalStyle.containerCentered]}>
+            <Logo />
+          </View>
+          <View style={[globalStyle.flex2, globalStyle.sectionCentered]}>
+            <InputField
+              placeholder="Enter email"
+              value={email}
+              onChangeText={(text) => handleOnChange("email", text)}
+            />
+            <InputField
+              placeholder="Enter password"
+              value={password}
+              secureTextEntry={true}
+              onChangeText={(text) => handleOnChange("password", text)}
+            />
 
-          <RoundCornerButton title="Login" onPress={() => onLoginPress()} />
-          <Text
-            style={{
-              fontSize: 28,
-              fontWeight: "bold",
-              color: color.LIGHT_GREEN,
-            }}
-            onPress={() => {
-              setInitialState();
-              navigation.navigate("SignUp");
-            }}
-          >
-            Sign Up
-          </Text>
-        </View>
-      </SafeAreaView>
+            <RoundCornerButton title="Login" onPress={() => onLoginPress()} />
+            <Text
+              style={{
+                fontSize: 28,
+                fontWeight: "bold",
+                color: color.LIGHT_GREEN,
+              }}
+              onPress={() => {
+                setInitialState();
+                navigation.navigate("SignUp");
+              }}
+            >
+              Sign Up
+            </Text>
+          </View>
+        </SafeAreaView>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
