@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "306828419856",
+    "firebase_url": "https://rnfb-df67c.firebaseio.com",
+    "project_id": "rnfb-df67c",
+    "storage_bucket": "rnfb-df67c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306828419856:android:80582ff8a155a398087b95",
+        "android_client_info": {
+          "package_name": "com.rnfb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "306828419856-kp4q506sppbquc39gfodnjd0gdgc0ci3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBq87TjTOT_6bp-oMJbcXhafSuGE1ivIVc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "306828419856-kp4q506sppbquc39gfodnjd0gdgc0ci3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
