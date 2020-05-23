@@ -61,8 +61,8 @@ export default ({ navigation }) => {
           setUniqueValue(uid);
           firebase
             .database()
-            .ref("users/")
-            .push({
+            .ref("users/" + uid)
+            .set({
               user: {
                 name: name,
                 email: email,

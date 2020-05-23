@@ -18,9 +18,11 @@ export default ({ navigation }) => {
   const [userDetail, setUserDetail] = useState({
     id: "",
     name: "",
+    profileImg: "",
   });
 
-  const { id, name } = userDetail;
+  const [allUsers, setAllUsers] = useState([]);
+  const { profileImg, name } = userDetail;
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -64,7 +66,17 @@ export default ({ navigation }) => {
               setUserDetail({
                 id: uuid,
                 name: child.val().user.name,
+                profileImg: child.val().user.profileImg,
               });
+            } else {
+              setAllUsers([
+                ...allUsers,
+                {
+                  id: uuid,
+                  name: child.val().user.name,
+                  profileImg: child.val().user.profileImg,
+                },
+              ]);
             }
           });
           dispatchLoaderAction({
@@ -103,7 +115,31 @@ export default ({ navigation }) => {
 
         // You can also display the image using data:
         // let source =  'data:image/jpeg;base64,' + response.data ;
-        setAvatarSource(source);
+        dispatchLoaderAction({
+          type: LOADING_START,
+        });
+        firebase
+          .database()
+          .ref("users/" + uuid)
+          .child("user")
+          .update({
+            profileImg: source,
+          })
+          .then(() => {
+            setUserDetail({
+              ...userDetail,
+              profileImg: source,
+            });
+            dispatchLoaderAction({
+              type: LOADING_STOP,
+            });
+          })
+          .catch((err) => {
+            alert(err);
+            dispatchLoaderAction({
+              type: LOADING_STOP,
+            });
+          });
       }
     });
   };
@@ -124,19 +160,19 @@ export default ({ navigation }) => {
 
   // * ON IMAGE TAP
   imgTap = () => {
-    if (!avatarSource) {
+    if (!profileImg) {
       navigation.navigate("ShowProfileImg", {
         name,
         imgText: name.charAt(0),
       });
     } else {
-      navigation.navigate("ShowProfileImg", { name, img: avatarSource });
+      navigation.navigate("ShowProfileImg", { name, img: profileImg });
     }
   };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: color.BLACK }}>
       <Profile
-        img={avatarSource}
+        img={profileImg}
         onImgTap={() => imgTap()}
         onEditImgTap={() => selectPhotoTapped()}
         name={name}
