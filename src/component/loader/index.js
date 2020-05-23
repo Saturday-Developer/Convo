@@ -1,15 +1,15 @@
-import React, {useContext} from 'react';
+import React, { useContext } from "react";
 import {
   ActivityIndicator,
   View,
   StyleSheet,
   Dimensions,
   Platform,
-} from 'react-native';
-import {color} from '../../utility';
-import {Store} from '../../context/store';
+} from "react-native";
+import { color } from "../../utility";
+import { Store } from "../../context/store";
 
-const {height, width} = Dimensions.get('window');
+const { height, width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   loaderContainer: {
@@ -17,27 +17,27 @@ const styles = StyleSheet.create({
     elevation: 2,
     height,
     width,
-    position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: color.BLACK_OPACITY,
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: color.SEMI_TRANSPARENT,
   },
   indicator: {
     backgroundColor: color.DARK_GRAY,
     height: 44,
     width: 44,
     borderRadius: 22,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignContent: 'center',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    alignContent: "center",
   },
 });
 
 const Loader = () => {
   const globalState = useContext(Store);
-  const {mapLoaderState} = globalState;
-  const {loading} = mapLoaderState;
+  const { mapLoaderState } = globalState;
+  const { loading } = mapLoaderState;
 
   return loading ? (
     <View style={styles.loaderContainer}>
@@ -47,8 +47,8 @@ const Loader = () => {
           animating={loading}
           color={color.WHITE}
           style={{
-            left: Platform.OS === 'ios' ? 1.3 : 0,
-            top: Platform.OS === 'ios' ? 1 : 0,
+            left: Platform.OS === "ios" ? 1.3 : 0,
+            top: Platform.OS === "ios" ? 1 : 0,
           }}
         />
       </View>

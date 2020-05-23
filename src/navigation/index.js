@@ -1,9 +1,9 @@
-import * as React from 'react';
-import {Text, Button} from 'react-native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {NavigationContainer} from '@react-navigation/native';
-import {Login, SignUp, Dashboard, Splash} from '../container';
-import {color} from '../utility';
+import * as React from "react";
+import { Text, Button } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
+import { Login, SignUp, Dashboard, Splash, ShowProfileImg } from "../container";
+import { color } from "../utility";
 
 const Stack = createStackNavigator();
 
@@ -14,34 +14,42 @@ function NavContainer() {
         initialRouteName="Splash"
         screenOptions={{
           headerShown: true,
-          headerStyle: {backgroundColor: color.DARK_GRAY},
+          headerStyle: { backgroundColor: color.DARK_GRAY },
           headerTitleStyle: {
-            fontWeight: 'bold',
+            fontWeight: "bold",
             fontSize: 20,
           },
           headerTintColor: color.WHITE,
-          headerTitleAlign: 'center',
-        }}>
+          headerTitleAlign: "center",
+        }}
+      >
         <Stack.Screen
           name="Splash"
           component={Splash}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Login"
           component={Login}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="SignUp"
           component={SignUp}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Dashboard"
           component={Dashboard}
           options={{
             headerLeft: null,
+          }}
+        />
+        <Stack.Screen
+          name="ShowProfileImg"
+          component={ShowProfileImg}
+          options={{
+            headerBackTitle: null,
           }}
         />
       </Stack.Navigator>
