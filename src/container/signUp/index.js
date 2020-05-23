@@ -1,5 +1,12 @@
 import React, { useState, useContext } from "react";
-import { Text, SafeAreaView, View } from "react-native";
+import {
+  Text,
+  SafeAreaView,
+  View,
+  Keyboard,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+} from "react-native";
 import firebase from "../../firebase/config";
 import { InputField, RoundCornerButton, Logo } from "../../component";
 import { globalStyle, color } from "../../utility";
@@ -17,7 +24,7 @@ export default ({ navigation }) => {
     password: "",
     confirmPassword: "",
   });
-
+  const [keyboardVerticalOffset, setkeyboardVerticalOffset] = useState(-100);
   const { email, password, confirmPassword, name } = credential;
 
   const setInitialState = () => {
@@ -77,45 +84,62 @@ export default ({ navigation }) => {
     });
   };
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: color.BLACK }}>
-      <View style={[globalStyle.containerCentered]}>
-        <Logo />
-      </View>
-      <View style={[globalStyle.flex2, globalStyle.sectionCentered]}>
-        <InputField
-          placeholder="Enter name"
-          value={name}
-          onChangeText={(text) => handleOnChange("name", text)}
-        />
-        <InputField
-          placeholder="Enter email"
-          value={email}
-          onChangeText={(text) => handleOnChange("email", text)}
-        />
-        <InputField
-          placeholder="Enter password"
-          secureTextEntry={true}
-          value={password}
-          onChangeText={(text) => handleOnChange("password", text)}
-        />
-        <InputField
-          placeholder="Confirm Password"
-          secureTextEntry={true}
-          value={confirmPassword}
-          onChangeText={(text) => handleOnChange("confirmPassword", text)}
-        />
+    <KeyboardAvoidingView
+      keyboardVerticalOffset={keyboardVerticalOffset}
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      style={[globalStyle.flex1, { backgroundColor: color.BLACK }]}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: color.BLACK }}>
+          <View style={[globalStyle.containerCentered]}>
+            <Logo />
+          </View>
+          <View style={[globalStyle.flex2, globalStyle.sectionCentered]}>
+            <InputField
+              placeholder="Enter name"
+              value={name}
+              onChangeText={(text) => handleOnChange("name", text)}
+              onFocus={() => setkeyboardVerticalOffset(-200)}
+              onBlur={() => setkeyboardVerticalOffset(-100)}
+            />
+            <InputField
+              placeholder="Enter email"
+              value={email}
+              onChangeText={(text) => handleOnChange("email", text)}
+            />
+            <InputField
+              placeholder="Enter password"
+              secureTextEntry={true}
+              value={password}
+              onChangeText={(text) => handleOnChange("password", text)}
+            />
+            <InputField
+              placeholder="Confirm Password"
+              secureTextEntry={true}
+              value={confirmPassword}
+              onChangeText={(text) => handleOnChange("confirmPassword", text)}
+            />
 
-        <RoundCornerButton title="Sign Up" onPress={() => onSignUpPress()} />
-        <Text
-          style={{ fontSize: 28, fontWeight: "bold", color: color.LIGHT_GREEN }}
-          onPress={() => {
-            setInitialState();
-            navigation.navigate("Login");
-          }}
-        >
-          Login
-        </Text>
-      </View>
-    </SafeAreaView>
+            <RoundCornerButton
+              title="Sign Up"
+              onPress={() => onSignUpPress()}
+            />
+            <Text
+              style={{
+                fontSize: 28,
+                fontWeight: "bold",
+                color: color.LIGHT_GREEN,
+              }}
+              onPress={() => {
+                setInitialState();
+                navigation.navigate("Login");
+              }}
+            >
+              Login
+            </Text>
+          </View>
+        </SafeAreaView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
