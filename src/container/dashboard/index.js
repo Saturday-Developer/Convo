@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState, useLayoutEffect } from "react";
-import { SafeAreaView, Alert, Text } from "react-native";
+import { SafeAreaView, Alert, Text, View, FlatList } from "react-native";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import ImagePicker from "react-native-image-picker";
-import { Profile, ShowUsers } from "../../component";
+import { Profile, ShowUsers, StickyHeader } from "../../component";
 import firebase from "../../firebase/config";
 import { color } from "../../utility";
 import { Store } from "../../context/store";
 import { LOADING_STOP, LOADING_START } from "../../context/actions/type";
-import { uuid } from "../../utility/constants";
+import { uuid, smallDeviceHeight } from "../../utility/constants";
 import { clearAsyncStorage } from "../../asyncStorage";
-import { FlatList } from "react-native-gesture-handler";
+import { deviceHeight } from "../../utility/styleHelper/appStyle";
 
 export default ({ navigation }) => {
   const globalState = useContext(Store);
@@ -20,7 +20,7 @@ export default ({ navigation }) => {
     name: "",
     profileImg: "",
   });
-
+  const [getScrollPosition, setScrollPosition] = useState(0);
   const [allUsers, setAllUsers] = useState([]);
   const { profileImg, name } = userDetail;
   useLayoutEffect(() => {
@@ -70,7 +70,6 @@ export default ({ navigation }) => {
                 profileImg: child.val().user.profileImg,
               });
             } else {
-              console.log(child.val().user.name);
               users.push({
                 id: uuid,
                 name: child.val().user.name,
@@ -170,19 +169,51 @@ export default ({ navigation }) => {
       navigation.navigate("ShowProfileImg", { name, img: profileImg });
     }
   };
+
+  // * GET OPACITY
+
+  const getOpacity = () => {
+    if (deviceHeight < smallDeviceHeight) {
+      return deviceHeight / 4;
+    } else {
+      return deviceHeight / 6;
+    }
+  };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: color.BLACK }}>
-      <Profile
-        img={profileImg}
-        onImgTap={() => imgTap(profileImg, name)}
-        onEditImgTap={() => selectPhotoTapped()}
-        name={name}
-      />
+      {getScrollPosition > getOpacity() && (
+        <StickyHeader
+          name={name}
+          img={profileImg}
+          onImgTap={() => imgTap(profileImg, name)}
+        />
+      )}
+
       {/* ALL USERS */}
       <FlatList
         alwaysBounceVertical={false}
         data={allUsers}
         keyExtractor={(_, index) => index.toString()}
+        onScroll={(event) =>
+          setScrollPosition(event.nativeEvent.contentOffset.y)
+        }
+        ListHeaderComponent={
+          <View
+            style={{
+              opacity:
+                getScrollPosition < getOpacity()
+                  ? (getOpacity() - getScrollPosition) / 100
+                  : 0,
+            }}
+          >
+            <Profile
+              img={profileImg}
+              onImgTap={() => imgTap(profileImg, name)}
+              onEditImgTap={() => selectPhotoTapped()}
+              name={name}
+            />
+          </View>
+        }
         renderItem={({ item }) => (
           <ShowUsers
             name={item.name}

@@ -3,9 +3,9 @@ import { Text, TouchableOpacity } from "react-native";
 import { Card, CardItem, Left, Body, Thumbnail } from "native-base";
 import styles from "./styles";
 
-const ShowUsers = ({ name, img, onImgTap }) => {
+const StickyHeader = ({ name, img, onImgTap }) => {
   return (
-    <Card style={styles.cardStyle}>
+    <Card style={styles.cardStyle} transparent>
       <CardItem style={styles.cardItemStyle}>
         <Left>
           <TouchableOpacity style={[styles.logoContainer]} onPress={onImgTap}>
@@ -25,4 +25,4 @@ const ShowUsers = ({ name, img, onImgTap }) => {
   );
 };
 
-export default ShowUsers;
+export default StickyHeader;

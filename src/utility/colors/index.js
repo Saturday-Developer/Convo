@@ -3,10 +3,6 @@
  */
 
 /**
- * Header Color
- */
-export const HEADER = "#494646";
-/**
  * Primary Color
  */
 export const PRIMARY = "rgb(11, 89, 173)";
@@ -33,9 +29,9 @@ export const SILVER = "rgb(192,192,192)";
 
 export const DARK_GRAY = "rgb(46, 46, 46)";
 
-export const TRANSPARENT = "transparent";
+export const DARK_LIME_GREEN = "rgba(0,128,0,0.2)";
 
-export const TRANSPARENT_OPACITY = "rgba(0,0,0,0.5)";
+export const TRANSPARENT = "transparent";
 
 /**
  * COLOR GRADIENT PRIMARY
