@@ -1,8 +1,14 @@
 import * as React from "react";
-import { Text, Button } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import { Login, SignUp, Dashboard, Splash, ShowProfileImg } from "../container";
+import {
+  Login,
+  SignUp,
+  Dashboard,
+  Splash,
+  ShowProfileImg,
+  Chat,
+} from "../container";
 import { color } from "../utility";
 
 const Stack = createStackNavigator();
@@ -48,6 +54,13 @@ function NavContainer() {
         <Stack.Screen
           name="ShowProfileImg"
           component={ShowProfileImg}
+          options={{
+            headerBackTitle: null,
+          }}
+        />
+        <Stack.Screen
+          name="Chat"
+          component={Chat}
           options={{
             headerBackTitle: null,
           }}

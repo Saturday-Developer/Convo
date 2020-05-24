@@ -71,7 +71,7 @@ export default ({ navigation }) => {
               });
             } else {
               users.push({
-                id: uuid,
+                id: child.val().user.uuid,
                 name: child.val().user.name,
                 profileImg: child.val().user.profileImg,
               });
@@ -159,7 +159,7 @@ export default ({ navigation }) => {
   };
 
   // * ON IMAGE TAP
-  imgTap = (profileImg, name) => {
+  const imgTap = (profileImg, name) => {
     if (!profileImg) {
       navigation.navigate("ShowProfileImg", {
         name,
@@ -170,6 +170,24 @@ export default ({ navigation }) => {
     }
   };
 
+  // * ON NAME TAP
+  const nameTap = (profileImg, name, guestUserId) => {
+    if (!profileImg) {
+      navigation.navigate("Chat", {
+        name,
+        imgText: name.charAt(0),
+        guestUserId,
+        currentUserId: uuid,
+      });
+    } else {
+      navigation.navigate("Chat", {
+        name,
+        img: profileImg,
+        guestUserId,
+        currentUserId: uuid,
+      });
+    }
+  };
   // * GET OPACITY
 
   const getOpacity = () => {
@@ -219,6 +237,7 @@ export default ({ navigation }) => {
             name={item.name}
             img={item.profileImg}
             onImgTap={() => imgTap(item.profileImg, item.name)}
+            onNameTap={() => nameTap(item.profileImg, item.name, item.id)}
           />
         )}
       />
