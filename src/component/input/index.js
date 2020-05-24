@@ -13,10 +13,12 @@ export default ({
   onSubmitEditing,
   onBlur,
   onFocus,
+  numberOfLines,
 }) => (
   <TextInput
     style={[styles.input, inputStyle]}
     value={value}
+    numberOfLines={numberOfLines}
     onChangeText={onChangeText}
     secureTextEntry={secureTextEntry}
     placeholder={placeholder}
