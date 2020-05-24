@@ -52,7 +52,7 @@ export default ({ navigation }) => {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then((res) => {
+        .then(() => {
           let uid = firebase.auth().currentUser.uid;
           dispatchLoaderAction({
             type: LOADING_STOP,
@@ -69,8 +69,11 @@ export default ({ navigation }) => {
                 uuid: uid,
                 profileImg: "",
               },
-            });
-          navigation.replace("Dashboard");
+            })
+            .then(() => {
+              navigation.replace("Dashboard");
+            })
+            .catch((err) => alert(err));
         })
         .catch((err) => {
           dispatchLoaderAction({

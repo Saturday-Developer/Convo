@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState, useLayoutEffect } from "react";
 import { SafeAreaView, Alert, Text } from "react-native";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import ImagePicker from "react-native-image-picker";
-import { Profile } from "../../component";
+import { Profile, ShowUsers } from "../../component";
 import firebase from "../../firebase/config";
 import { color } from "../../utility";
 import { Store } from "../../context/store";
@@ -14,7 +14,6 @@ import { FlatList } from "react-native-gesture-handler";
 export default ({ navigation }) => {
   const globalState = useContext(Store);
   const { dispatchLoaderAction } = globalState;
-  const [avatarSource, setAvatarSource] = useState(null);
 
   const [userDetail, setUserDetail] = useState({
     id: "",
@@ -79,6 +78,7 @@ export default ({ navigation }) => {
               });
             }
           });
+
           setAllUsers(users);
           dispatchLoaderAction({
             type: LOADING_STOP,
@@ -160,7 +160,7 @@ export default ({ navigation }) => {
   };
 
   // * ON IMAGE TAP
-  imgTap = () => {
+  imgTap = (profileImg, name) => {
     if (!profileImg) {
       navigation.navigate("ShowProfileImg", {
         name,
@@ -174,15 +174,21 @@ export default ({ navigation }) => {
     <SafeAreaView style={{ flex: 1, backgroundColor: color.BLACK }}>
       <Profile
         img={profileImg}
-        onImgTap={() => imgTap()}
+        onImgTap={() => imgTap(profileImg, name)}
         onEditImgTap={() => selectPhotoTapped()}
         name={name}
       />
+      {/* ALL USERS */}
       <FlatList
+        alwaysBounceVertical={false}
         data={allUsers}
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }) => (
-          <Text style={{ color: "#fff" }}>{item.name}</Text>
+          <ShowUsers
+            name={item.name}
+            img={item.profileImg}
+            onImgTap={() => imgTap(item.profileImg, item.name)}
+          />
         )}
       />
     </SafeAreaView>

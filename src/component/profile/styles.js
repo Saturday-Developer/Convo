@@ -2,6 +2,9 @@ import { StyleSheet } from "react-native";
 import { appStyle, color } from "../../utility";
 
 export default StyleSheet.create({
+  container: {
+    paddingVertical: 10,
+  },
   imgContainer: {
     height: 154,
     width: 154,
