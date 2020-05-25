@@ -1,12 +1,12 @@
 import React from "react";
-import { View, Text } from "react-native";
-import { Card } from "native-base";
+import { View, Text, Image } from "react-native";
+import { Card, CardItem } from "native-base";
 import { deviceWidth } from "../../utility/styleHelper/appStyle";
 import { uuid } from "../../utility/constants";
 import styles from "./styles";
 import { color } from "../../utility";
 
-const ChatBox = ({ userId, msg }) => {
+const ChatBox = ({ userId, msg, img }) => {
   let isCurrentUser = userId === uuid ? true : false;
   return (
     <Card
@@ -26,9 +26,21 @@ const ChatBox = ({ userId, msg }) => {
           },
         ]}
       >
-        <Text style={[styles.chatTxt, isCurrentUser && { color: color.WHITE }]}>
-          {msg}
-        </Text>
+        {img ? (
+          <CardItem cardBody>
+            <Image
+              source={{ uri: img }}
+              resizeMode="cover"
+              style={{ height: 200, width: deviceWidth / 2 }}
+            />
+          </CardItem>
+        ) : (
+          <Text
+            style={[styles.chatTxt, isCurrentUser && { color: color.WHITE }]}
+          >
+            {msg}
+          </Text>
+        )}
       </View>
     </Card>
   );

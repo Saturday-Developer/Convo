@@ -10,17 +10,17 @@ export default StyleSheet.create({
   input: {
     borderTopLeftRadius: 20,
     borderBottomLeftRadius: 20,
-    width: "80%",
+    width: "70%",
   },
 
   sendBtnContainer: {
     height: appStyle.fieldHeight,
-    width: "19%",
     backgroundColor: color.DARK_GRAY,
     borderTopRightRadius: 20,
     borderBottomRightRadius: 20,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-end",
+    flexDirection: "row",
+    width: "29%",
   },
-  sendIcon: { alignSelf: "flex-end" },
 });

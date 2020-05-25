@@ -93,9 +93,6 @@ export default ({ navigation }) => {
 
   const selectPhotoTapped = () => {
     const options = {
-      quality: 1.0,
-      maxWidth: 500,
-      maxHeight: 500,
       storageOptions: {
         skipBackup: true,
       },
@@ -111,9 +108,7 @@ export default ({ navigation }) => {
       } else if (response.customButton) {
         console.log("User tapped custom button: ", response.customButton);
       } else {
-        // let source = response.uri;
-
-        // You can also display the image using data:
+        // Base 64 image:
         let source = "data:image/jpeg;base64," + response.data;
         dispatchLoaderAction({
           type: LOADING_START,

@@ -8,6 +8,7 @@ import {
   FlatList,
 } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import ImagePicker from "react-native-image-picker";
 import { InputField, ChatBox } from "../../component";
 import firebase from "../../firebase/config";
 import { globalStyle, color, appStyle } from "../../utility";
@@ -42,6 +43,7 @@ const Chat = ({ route, navigation }) => {
               sendBy: child.val().messege.sender,
               receiveBy: child.val().messege.receiver,
               msg: child.val().messege.msg,
+              img: child.val().messege.img,
             });
           });
           setMesseges(msgs.reverse());
@@ -62,6 +64,7 @@ const Chat = ({ route, navigation }) => {
           sender: currentUserId,
           receiver: guestUserId,
           msg: msgValue,
+          img: "",
         },
       })
       .then(() => {})
@@ -82,6 +85,62 @@ const Chat = ({ route, navigation }) => {
       .catch((err) => alert(err));
   };
 
+  const handleCamera = () => {
+    const options = {
+      storageOptions: {
+        skipBackup: true,
+      },
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log("Response = ", response);
+
+      if (response.didCancel) {
+        console.log("User cancelled photo picker");
+      } else if (response.error) {
+        console.log("ImagePicker Error: ", response.error);
+      } else if (response.customButton) {
+        console.log("User tapped custom button: ", response.customButton);
+      } else {
+        // Base 64 image:
+        let source = "data:image/jpeg;base64," + response.data;
+        firebase
+          .database()
+          .ref("messeges/" + currentUserId)
+          .child(guestUserId)
+          .push({
+            messege: {
+              sender: currentUserId,
+              receiver: guestUserId,
+              msg: msgValue,
+              img: source,
+            },
+          })
+          .then(() => {})
+          .catch((err) => {
+            alert(err);
+          });
+
+        // *Guest User
+        firebase
+          .database()
+          .ref("messeges/" + guestUserId)
+          .child(currentUserId)
+          .push({
+            messege: {
+              sender: currentUserId,
+              receiver: guestUserId,
+              msg: msgValue,
+              img: source,
+            },
+          })
+          .then(() => {})
+          .catch((err) => {
+            alert(err);
+          });
+      }
+    });
+  };
   const handleOnChange = (text) => {
     setMsgValue(text);
   };
@@ -102,7 +161,7 @@ const Chat = ({ route, navigation }) => {
               data={messeges}
               keyExtractor={(_, index) => index.toString()}
               renderItem={({ item }) => (
-                <ChatBox msg={item.msg} userId={item.sendBy} />
+                <ChatBox msg={item.msg} userId={item.sendBy} img={item.img} />
               )}
             />
             {/* Send Message */}
@@ -110,11 +169,19 @@ const Chat = ({ route, navigation }) => {
               <InputField
                 placeholder="Type Here"
                 numberOfLines={10}
-                inputStyle={styles.input}
+                inputStyle={[styles.input]}
                 value={msgValue}
                 onChangeText={(text) => handleOnChange(text)}
               />
-              <View style={styles.sendBtnContainer}>
+              <View style={[styles.sendBtnContainer]}>
+                <MaterialCommunityIcons
+                  name="camera"
+                  color={color.WHITE}
+                  size={appStyle.fieldHeight}
+                  style={styles.sendIcon}
+                  onPress={() => handleCamera()}
+                />
+
                 <MaterialCommunityIcons
                   name="send-circle"
                   color={color.WHITE}
