@@ -55,34 +55,36 @@ const Chat = ({ route, navigation }) => {
 
   const handleSend = () => {
     setMsgValue("");
-    firebase
-      .database()
-      .ref("messeges/" + currentUserId)
-      .child(guestUserId)
-      .push({
-        messege: {
-          sender: currentUserId,
-          receiver: guestUserId,
-          msg: msgValue,
-          img: "",
-        },
-      })
-      .then(() => {})
-      .catch((err) => alert(err));
-    // *Guest user
-    firebase
-      .database()
-      .ref("messeges/" + guestUserId)
-      .child(currentUserId)
-      .push({
-        messege: {
-          sender: currentUserId,
-          receiver: guestUserId,
-          msg: msgValue,
-        },
-      })
-      .then(() => {})
-      .catch((err) => alert(err));
+    if (msgValue) {
+      firebase
+        .database()
+        .ref("messeges/" + currentUserId)
+        .child(guestUserId)
+        .push({
+          messege: {
+            sender: currentUserId,
+            receiver: guestUserId,
+            msg: msgValue,
+            img: "",
+          },
+        })
+        .then(() => {})
+        .catch((err) => alert(err));
+      // *Guest user
+      firebase
+        .database()
+        .ref("messeges/" + guestUserId)
+        .child(currentUserId)
+        .push({
+          messege: {
+            sender: currentUserId,
+            receiver: guestUserId,
+            msg: msgValue,
+          },
+        })
+        .then(() => {})
+        .catch((err) => alert(err));
+    }
   };
 
   const handleCamera = () => {
