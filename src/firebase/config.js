@@ -1,11 +1,10 @@
-import Firebase from 'firebase';
+import Firebase from "firebase";
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyBq87TjTOT_6bp-oMJbcXhafSuGE1ivIVc',
-  databaseURL: 'https://rnfb-df67c.firebaseio.com/',
-  projectId: 'rnfb-df67c',
-  storageBucket: 'gs://rnfb-df67c.appspot.com',
-  appId: '1:306828419856:android:80582ff8a155a398087b95',
+  apiKey: "AIzaSyBKaf8yR21ceH5SEkRgaSs7SGjLrT-9VIw",
+  databaseURL: "https://convo-aafa0.firebaseio.com/",
+  projectId: "convo-aafa0",
+  appId: "1:177619403383:android:95ebe500af65abf7ee3c72",
 };
 
 export default Firebase.initializeApp(firebaseConfig);
