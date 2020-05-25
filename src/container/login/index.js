@@ -74,12 +74,16 @@ export default ({ navigation }) => {
   // * ON INPUT FOCUS
 
   const handleFocus = () => {
-    toggleLogo(!logo);
+    setTimeout(() => {
+      toggleLogo(false);
+    }, 200);
   };
   // * ON INPUT BLUR
 
   const handleBlur = () => {
-    toggleLogo(!logo);
+    setTimeout(() => {
+      toggleLogo(true);
+    }, 200);
   };
   return (
     <KeyboardAvoidingView
