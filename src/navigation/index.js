@@ -6,7 +6,7 @@ import {
   SignUp,
   Dashboard,
   Splash,
-  ShowProfileImg,
+  ShowFullImg,
   Chat,
 } from "../container";
 import { color } from "../utility";
@@ -52,8 +52,8 @@ function NavContainer() {
           }}
         />
         <Stack.Screen
-          name="ShowProfileImg"
-          component={ShowProfileImg}
+          name="ShowFullImg"
+          component={ShowFullImg}
           options={{
             headerBackTitle: null,
           }}

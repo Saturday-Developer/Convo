@@ -2,7 +2,7 @@ import Login from "./login";
 import SignUp from "./signUp";
 import Dashboard from "./dashboard";
 import Splash from "./splash";
-import ShowProfileImg from "./showProfileImg";
+import ShowFullImg from "./showFullImg";
 import Chat from "./chat";
 
-export { Login, SignUp, Dashboard, Splash, ShowProfileImg, Chat };
+export { Login, SignUp, Dashboard, Splash, ShowFullImg, Chat };

@@ -144,6 +144,11 @@ const Chat = ({ route, navigation }) => {
   const handleOnChange = (text) => {
     setMsgValue(text);
   };
+
+  // * ON IMAGE TAP
+  const imgTap = (profileImg) => {
+    navigation.navigate("ShowFullImg", { name, img: profileImg });
+  };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: color.BLACK }}>
       <KeyboardAvoidingView
@@ -161,7 +166,12 @@ const Chat = ({ route, navigation }) => {
               data={messeges}
               keyExtractor={(_, index) => index.toString()}
               renderItem={({ item }) => (
-                <ChatBox msg={item.msg} userId={item.sendBy} img={item.img} />
+                <ChatBox
+                  msg={item.msg}
+                  userId={item.sendBy}
+                  img={item.img}
+                  onImgTap={() => imgTap(item.img)}
+                />
               )}
             />
             {/* Send Message */}

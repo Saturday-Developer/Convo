@@ -156,12 +156,12 @@ export default ({ navigation }) => {
   // * ON IMAGE TAP
   const imgTap = (profileImg, name) => {
     if (!profileImg) {
-      navigation.navigate("ShowProfileImg", {
+      navigation.navigate("ShowFullImg", {
         name,
         imgText: name.charAt(0),
       });
     } else {
-      navigation.navigate("ShowProfileImg", { name, img: profileImg });
+      navigation.navigate("ShowFullImg", { name, img: profileImg });
     }
   };
 
