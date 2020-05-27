@@ -6,6 +6,7 @@ import Profile from "./profile";
 import ShowUsers from "./showUsers";
 import StickyHeader from "./stickyHeader";
 import ChatBox from "./chatBox";
+import FieldInput from "./fieldInput";
 
 export {
   RoundCornerButton,
@@ -16,4 +17,5 @@ export {
   ShowUsers,
   StickyHeader,
   ChatBox,
+  FieldInput,
 };
