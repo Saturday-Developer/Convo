@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "177619403383",
+    "firebase_url": "https://convo-aafa0.firebaseio.com",
+    "project_id": "convo-aafa0",
+    "storage_bucket": "convo-aafa0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177619403383:android:95ebe500af65abf7ee3c72",
+        "android_client_info": {
+          "package_name": "com.rnfb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "177619403383-4e5rdki3pkei76hhi7mhjkj8gg74c204.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKaf8yR21ceH5SEkRgaSs7SGjLrT-9VIw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "177619403383-4e5rdki3pkei76hhi7mhjkj8gg74c204.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
