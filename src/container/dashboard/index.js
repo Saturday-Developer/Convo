@@ -63,22 +63,26 @@ export default ({ navigation }) => {
         .ref("users")
         .on("value", (dataSnapshot) => {
           let users = [];
+          let currentUser = {
+            id: "",
+            name: "",
+            profileImg: "",
+          };
+          let users = [];
           dataSnapshot.forEach((child) => {
-            if (uuid === child.val().user.uuid) {
-              setUserDetail({
-                id: uuid,
-                name: child.val().user.name,
-                profileImg: child.val().user.profileImg,
-              });
+            if (uuid === child.val().uuid) {
+              currentUser.id = uuid;
+              currentUser.name = child.val().name;
+              currentUser.profileImg = child.val().profileImg;
             } else {
               users.push({
-                id: child.val().user.uuid,
-                name: child.val().user.name,
-                profileImg: child.val().user.profileImg,
+                id: child.val().uuid,
+                name: child.val().name,
+                profileImg: child.val().profileImg,
               });
             }
           });
-
+          setUserDetail(currentUser);
           setAllUsers(users);
           dispatchLoaderAction({
             type: LOADING_STOP,
