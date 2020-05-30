@@ -18,6 +18,7 @@ import {
   setUniqueValue,
   keyboardVerticalOffset,
 } from "../../utility/constants";
+import { LoginRequest } from "../../network";
 
 export default ({ navigation }) => {
   const globalState = useContext(Store);
@@ -51,9 +52,7 @@ export default ({ navigation }) => {
       dispatchLoaderAction({
         type: LOADING_START,
       });
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password)
+      LoginRequest(email, password)
         .then((res) => {
           setAsyncStorage(keys.uuid, res.user.uid);
           setUniqueValue(res.user.uid);

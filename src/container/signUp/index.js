@@ -17,6 +17,7 @@ import {
   setUniqueValue,
   keyboardVerticalOffset,
 } from "../../utility/constants";
+import { SignUpRequest, AddUser } from "../../network";
 
 export default ({ navigation }) => {
   const globalState = useContext(Store);
@@ -49,31 +50,25 @@ export default ({ navigation }) => {
       dispatchLoaderAction({
         type: LOADING_START,
       });
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password)
+      SignUpRequest(email, password)
         .then(() => {
           let uid = firebase.auth().currentUser.uid;
-          dispatchLoaderAction({
-            type: LOADING_STOP,
-          });
-          setAsyncStorage(keys.uuid, uid);
-          setUniqueValue(uid);
-          firebase
-            .database()
-            .ref("users/" + uid)
-            .set({
-              user: {
-                name: name,
-                email: email,
-                uuid: uid,
-                profileImg: "",
-              },
-            })
+          let profileImg = "";
+          AddUser(name, email, uid, profileImg)
             .then(() => {
+              setAsyncStorage(keys.uuid, uid);
+              setUniqueValue(uid);
+              dispatchLoaderAction({
+                type: LOADING_STOP,
+              });
               navigation.replace("Dashboard");
             })
-            .catch((err) => alert(err));
+            .catch((err) => {
+              dispatchLoaderAction({
+                type: LOADING_STOP,
+              });
+              alert(err);
+            });
         })
         .catch((err) => {
           dispatchLoaderAction({

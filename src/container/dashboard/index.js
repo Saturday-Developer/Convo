@@ -10,6 +10,7 @@ import { LOADING_STOP, LOADING_START } from "../../context/actions/type";
 import { uuid, smallDeviceHeight } from "../../utility/constants";
 import { clearAsyncStorage } from "../../asyncStorage";
 import { deviceHeight } from "../../utility/styleHelper/appStyle";
+import { UpdateUser, LogOutUser } from "../../network";
 
 export default ({ navigation }) => {
   const globalState = useContext(Store);
@@ -113,13 +114,7 @@ export default ({ navigation }) => {
         dispatchLoaderAction({
           type: LOADING_START,
         });
-        firebase
-          .database()
-          .ref("users/" + uuid)
-          .child("user")
-          .update({
-            profileImg: source,
-          })
+        UpdateUser(uuid, source)
           .then(() => {
             setUserDetail({
               ...userDetail,
@@ -129,7 +124,7 @@ export default ({ navigation }) => {
               type: LOADING_STOP,
             });
           })
-          .catch((err) => {
+          .catch(() => {
             alert(err);
             dispatchLoaderAction({
               type: LOADING_STOP,
@@ -140,9 +135,7 @@ export default ({ navigation }) => {
   };
   // * LOG OUT
   const logout = () => {
-    firebase
-      .auth()
-      .signOut()
+    LogOutUser()
       .then(() => {
         clearAsyncStorage()
           .then(() => {
