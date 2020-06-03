@@ -1,21 +1,23 @@
 import React, { useLayoutEffect, useState, useEffect, Fragment } from "react";
 import {
+  View,
   Text,
   SafeAreaView,
+  FlatList,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  Platform,
   Keyboard,
-  FlatList,
 } from "react-native";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import ImagePicker from "react-native-image-picker";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { globalStyle, color, appStyle } from "../../utility";
+import styles from "./styles";
 import { InputField, ChatBox } from "../../component";
 import firebase from "../../firebase/config";
-import { globalStyle, color, appStyle } from "../../utility";
+import { senderMsg, recieverMsg } from "../../network";
 import { deviceHeight } from "../../utility/styleHelper/appStyle";
 import { smallDeviceHeight } from "../../utility/constants";
-import { View } from "native-base";
-import styles from "./styles";
 
 const Chat = ({ route, navigation }) => {
   const { params } = route;
@@ -38,129 +40,82 @@ const Chat = ({ route, navigation }) => {
         .on("value", (dataSnapshot) => {
           let msgs = [];
           dataSnapshot.forEach((child) => {
-            console.log(child.val().messege.sender);
             msgs.push({
               sendBy: child.val().messege.sender,
-              receiveBy: child.val().messege.receiver,
+              recievedBy: child.val().messege.reciever,
               msg: child.val().messege.msg,
               img: child.val().messege.img,
             });
           });
           setMesseges(msgs.reverse());
         });
-    } catch (err) {
-      alert(err);
+    } catch (error) {
+      alert(error);
     }
   }, []);
 
   const handleSend = () => {
     setMsgValue("");
     if (msgValue) {
-      firebase
-        .database()
-        .ref("messeges/" + currentUserId)
-        .child(guestUserId)
-        .push({
-          messege: {
-            sender: currentUserId,
-            receiver: guestUserId,
-            msg: msgValue,
-            img: "",
-          },
-        })
+      senderMsg(msgValue, currentUserId, guestUserId, "")
         .then(() => {})
         .catch((err) => alert(err));
-      // *Guest user
-      firebase
-        .database()
-        .ref("messeges/" + guestUserId)
-        .child(currentUserId)
-        .push({
-          messege: {
-            sender: currentUserId,
-            receiver: guestUserId,
-            msg: msgValue,
-          },
-        })
+
+      // * guest user
+
+      recieverMsg(msgValue, currentUserId, guestUserId, "")
         .then(() => {})
         .catch((err) => alert(err));
     }
   };
 
   const handleCamera = () => {
-    const options = {
+    const option = {
       storageOptions: {
         skipBackup: true,
       },
     };
 
-    ImagePicker.showImagePicker(options, (response) => {
-      console.log("Response = ", response);
-
+    ImagePicker.showImagePicker(option, (response) => {
       if (response.didCancel) {
-        console.log("User cancelled photo picker");
+        console.log("User cancel image picker");
       } else if (response.error) {
-        console.log("ImagePicker Error: ", response.error);
-      } else if (response.customButton) {
-        console.log("User tapped custom button: ", response.customButton);
+        console.log(" image picker error", response.error);
       } else {
-        // Base 64 image:
+        // Base 64
         let source = "data:image/jpeg;base64," + response.data;
-        firebase
-          .database()
-          .ref("messeges/" + currentUserId)
-          .child(guestUserId)
-          .push({
-            messege: {
-              sender: currentUserId,
-              receiver: guestUserId,
-              msg: msgValue,
-              img: source,
-            },
-          })
-          .then(() => {})
-          .catch((err) => {
-            alert(err);
-          });
 
-        // *Guest User
-        firebase
-          .database()
-          .ref("messeges/" + guestUserId)
-          .child(currentUserId)
-          .push({
-            messege: {
-              sender: currentUserId,
-              receiver: guestUserId,
-              msg: msgValue,
-              img: source,
-            },
-          })
+        senderMsg(msgValue, currentUserId, guestUserId, source)
           .then(() => {})
-          .catch((err) => {
-            alert(err);
-          });
+          .catch((err) => alert(err));
+
+        // * guest user
+
+        recieverMsg(msgValue, currentUserId, guestUserId, source)
+          .then(() => {})
+          .catch((err) => alert(err));
       }
     });
   };
+
   const handleOnChange = (text) => {
     setMsgValue(text);
   };
 
-  // * ON IMAGE TAP
-  const imgTap = (profileImg) => {
-    navigation.navigate("ShowFullImg", { name, img: profileImg });
+  //   * On image tap
+  const imgTap = (chatImg) => {
+    navigation.navigate("ShowFullImg", { name, img: chatImg });
   };
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: color.BLACK }}>
+    <SafeAreaView style={[globalStyle.flex1, { backgroundColor: color.BLACK }]}>
       <KeyboardAvoidingView
         keyboardVerticalOffset={deviceHeight > smallDeviceHeight ? 100 : 70}
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={[globalStyle.flex1, { backgroundColor: color.BLACK }]}
       >
         <TouchableWithoutFeedback
+          style={[globalStyle.flex1]}
           onPress={Keyboard.dismiss}
-          style={{ flex: 1 }}
         >
           <Fragment>
             <FlatList
@@ -176,29 +131,27 @@ const Chat = ({ route, navigation }) => {
                 />
               )}
             />
+
             {/* Send Message */}
             <View style={styles.sendMessageContainer}>
               <InputField
                 placeholder="Type Here"
                 numberOfLines={10}
-                inputStyle={[styles.input]}
+                inputStyle={styles.input}
                 value={msgValue}
                 onChangeText={(text) => handleOnChange(text)}
               />
-              <View style={[styles.sendBtnContainer]}>
+              <View style={styles.sendBtnContainer}>
                 <MaterialCommunityIcons
                   name="camera"
                   color={color.WHITE}
                   size={appStyle.fieldHeight}
-                  style={styles.sendIcon}
                   onPress={() => handleCamera()}
                 />
-
                 <MaterialCommunityIcons
                   name="send-circle"
                   color={color.WHITE}
                   size={appStyle.fieldHeight}
-                  style={styles.sendIcon}
                   onPress={() => handleSend()}
                 />
               </View>
