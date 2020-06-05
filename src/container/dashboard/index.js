@@ -68,7 +68,6 @@ export default ({ navigation }) => {
             name: "",
             profileImg: "",
           };
-          let users = [];
           dataSnapshot.forEach((child) => {
             if (uuid === child.val().uuid) {
               currentUser.id = uuid;
